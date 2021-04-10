@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> multiply(vector<vector<int>> &a, vector<vector<int>> &b){
+    vector<vector<int>> ans(8,vector<int>(4,0));
+    for(int i=0;i<8;i++){
+        for(int j=0;j<4;j++){
+            for(int k=0;k<4;k++){
+                ans[i][j]=ans[i][j]+a[i][k]*b[k][j];
+            }   
+        }
+    }
+    return ans;
+}
+
+void translate_y_axis(vector<vector<int>> &v,int y){
+    vector<vector<int>> b(4,vector<int>(4,0));
+    for(int i=0;i<4;i++){
+        b[i][i]=1;
+    }
+    b[3][1]=y;
+    v = multiply(v,b);
+}
+
+void scale(vector<vector<int>> &v,int x,int y,int z){
+    vector<vector<int>> b(4,vector<int>(4,0));
+    b[0][0]=x;
+    b[1][1]=y;
+    b[2][2]=z;
+    b[3][3]=1;
+    v = multiply(v,b);
+}
+
+int main()
+{
+    vector<vector<int>> v(8,vector<int>(4));
+    for(int i=0;i<8;i++){
+        for(int j=0;j<3;j++){
+            int x;
+            cin>>x;
+            v[i][j]=x;
+        }
+        v[i][3]=1;
+    }
+    int y;
+    cin>>y;                             // translation value in y direction
+    translate_y_axis(v,-y);
+    scale(v,2,3,4);
+    translate_y_axis(v,y);
+    for(auto i : v){
+        for(auto j: i){
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+    return 0;
+}
